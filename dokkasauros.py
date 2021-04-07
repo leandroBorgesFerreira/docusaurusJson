@@ -20,17 +20,26 @@ def folders_and_items(path):
     folders = list(map(os.path.basename, folders_path))
     items = list(map(os.path.basename, items_path))
 
-    return folders_path, folders, items
+    return folders_path, items_path
+
+def get_docussauros_id(file_path):
+    print("file to read: " + file_path)
+    with open(file_path, 'r') as file:
+        file_lines = file.readlines()
+        return file_lines[1].split(":")[1].strip()
 
 def directory_tree_to_map2(path):
-    directory_map = {'name': os.path.basename(path)}
-    directory_map = {'type': "category"}
+    directory_map = {}
+    directory_map['label'] = os.path.basename(path)
+    directory_map['type'] = "category"
 
-    folders_path, folders, items = folders_and_items(path)
+    folders_path, items_path = folders_and_items(path)
 
-    directory_map['items'] = items
+    items = list(map(get_docussauros_id, items_path))
 
     for folder_path in folders_path:
-        directory_map[folder_path] = directory_tree_to_map2(folder_path)
+        items.append(directory_tree_to_map2(folder_path))
+
+    directory_map['items'] = items
 
     return directory_map
