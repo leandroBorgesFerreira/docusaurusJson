@@ -8,7 +8,7 @@ def cli(path):
     """This command traverses the dokka directory and
     look for .md files to map the hierarchy of files
     """
-    directory_map = directory_tree_to_map2(path)
+    directory_map = directory_tree_to_map(path)
     print(json.dumps(directory_map))
 
 def folders_and_items(path):
@@ -27,18 +27,22 @@ def get_docussauros_id(file_path):
         file_lines = file.readlines()
         return file_lines[1].split(":")[1].strip()
 
-def directory_tree_to_map2(path):
+def directory_tree_to_map(path):
     directory_map = {}
     directory_map['label'] = os.path.basename(path)
     directory_map['type'] = "category"
 
     folders_path, items_path = folders_and_items(path)
 
-    items = list(map(get_docussauros_id, items_path))
+    cleaned_items = list(filter(is_markdown, items_path))
+    items = list(map(get_docussauros_id, cleaned_items))
 
     for folder_path in folders_path:
-        items.append(directory_tree_to_map2(folder_path))
+        items.append(directory_tree_to_map(folder_path))
 
     directory_map['items'] = items
 
     return directory_map
+
+def is_markdown(file_path):
+    return file_path.endswith(".md")
