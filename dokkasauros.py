@@ -23,7 +23,6 @@ def folders_and_items(path):
     return folders_path, items_path
 
 def get_docussauros_id(file_path):
-    print("file to read: " + file_path)
     with open(file_path, 'r') as file:
         file_lines = file.readlines()
         return file_lines[1].split(":")[1].strip()
