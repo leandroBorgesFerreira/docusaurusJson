@@ -34,7 +34,7 @@ def directory_tree_to_map(path):
 
     folders_path, items_path = folders_and_items(path)
 
-    cleaned_items = list(filter(is_markdown, items_path))
+    cleaned_items = list(filter(is_index_file, items_path))
     items = list(map(get_docussauros_id, cleaned_items))
 
     for folder_path in folders_path:
@@ -46,3 +46,6 @@ def directory_tree_to_map(path):
 
 def is_markdown(file_path):
     return file_path.endswith(".md")
+
+def is_index_file(file_path):
+    return file_path.endswith("index.md")
