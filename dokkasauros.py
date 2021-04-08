@@ -24,8 +24,15 @@ def folders_and_items(path):
 
 def get_docussauros_id(file_path):
     with open(file_path, 'r') as file:
+        path_to_file = "/".join(file_path.split('/')[1:-1])
         file_lines = file.readlines()
-        return file_lines[1].split(":")[1].strip()
+        id = path_to_file + "/" + file_lines[1].split(":")[1].strip()
+
+        if id.startswith("/") == True:
+            return id[1:]
+        else:
+            return id
+
 
 def directory_tree_to_map(path):
     directory_map = {}
