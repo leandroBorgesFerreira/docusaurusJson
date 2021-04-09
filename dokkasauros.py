@@ -33,7 +33,7 @@ def folders_and_items(path):
     return folders_path, items_path
 
 def get_docussauros_id(file_path):
-    return file_path.split("/")[-1][:-3]
+    return file_path[2:-3]
 
 def directory_tree_to_map(path):
     directory_map = {}
@@ -42,7 +42,7 @@ def directory_tree_to_map(path):
 
     folders_path, items_path = folders_and_items(path)
 
-    cleaned_items = list(filter(is_index_file, items_path))
+    cleaned_items = list(filter(is_markdown, items_path))
     items = list(map(get_docussauros_id, cleaned_items))
 
     for folder_path in folders_path:
