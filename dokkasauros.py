@@ -10,7 +10,7 @@ def cli(path):
     """
     directory_map = directory_tree_to_map(path)
     sidebar = sidebar_map(directory_map)
-    json_dump = json.dumps(sidebar, indent=2, sort_keys=True)
+    json_dump = json.dumps(sidebar, indent=2, sort_keys=False)
 
     with open("sidebars.js", "w") as sidebar_file:
         sidebar_file.write("module.exports = ")
