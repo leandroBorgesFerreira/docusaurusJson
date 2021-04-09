@@ -9,7 +9,17 @@ def cli(path):
     look for .md files to map the hierarchy of files
     """
     directory_map = directory_tree_to_map(path)
-    print(json.dumps(directory_map))
+    sidebar = sidebar_map(directory_map)
+    json_dump = json.dumps(sidebar, indent=2, sort_keys=True)
+
+    with open("sidebars.js", "w") as sidebar_file:
+        sidebar_file.write("module.exports = ")
+        sidebar_file.write(json_dump)
+
+def sidebar_map(content_map):
+    docs_list = list()
+    docs_list.append(content_map)
+    return {"docs": docs_list}
 
 def folders_and_items(path):
     directory_files = os.listdir(path)
@@ -32,7 +42,6 @@ def get_docussauros_id(file_path):
             return id[1:]
         else:
             return id
-
 
 def directory_tree_to_map(path):
     directory_map = {}
