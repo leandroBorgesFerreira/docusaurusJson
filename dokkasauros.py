@@ -48,6 +48,11 @@ def directory_tree_to_map(path):
     for folder_path in folders_path:
         items.append(directory_tree_to_map(folder_path))
 
+    for item in items:
+        if "index" in item:
+            items.remove(item)
+            items.insert(0, item)
+
     directory_map['items'] = items
 
     return directory_map
