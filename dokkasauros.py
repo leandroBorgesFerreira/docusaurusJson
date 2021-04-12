@@ -50,14 +50,23 @@ def directory_tree_to_map(path, label):
         folder_name = os.path.basename(folder_path)
         items.append(directory_tree_to_map(folder_path, folder_name))
 
-    for item in items:
-        if "index" in item:
-            items.remove(item)
-            items.insert(0, item)
-
-    directory_map['items'] = items
+    directory_map['items'] = organize_items(items, label)
 
     return directory_map
+
+def organize_items(items, label):
+    for item in items:
+        if str(item).endswith("index"):
+            items.remove(item)
+            items.insert(0, item)
+        elif str(item).endswith(label):
+            if str(items[0]).endswith("index"):
+                items.remove(item)
+                items.insert(1, item)
+            else:
+                items.remove(item)
+                items.insert(0, item)
+    return items
 
 def is_markdown(file_path):
     return file_path.endswith(".md")
