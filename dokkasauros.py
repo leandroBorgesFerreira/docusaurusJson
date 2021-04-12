@@ -4,11 +4,12 @@ import json
 
 @click.command()
 @click.argument('path')
-def cli(path):
+@click.argument('root_name')
+def cli(path, root_name):
     """This command traverses the dokka directory and
     look for .md files to map the hierarchy of files
     """
-    directory_map = directory_tree_to_map(path)
+    directory_map = directory_tree_to_map(path, root_name)
     sidebar = sidebar_map(directory_map)
     json_dump = json.dumps(sidebar, indent=2, sort_keys=False)
 
@@ -35,9 +36,9 @@ def folders_and_items(path):
 def get_docussauros_id(file_path):
     return file_path[2:-3]
 
-def directory_tree_to_map(path):
+def directory_tree_to_map(path, label):
     directory_map = {}
-    directory_map['label'] = os.path.basename(path)
+    directory_map['label'] = label
     directory_map['type'] = "category"
 
     folders_path, items_path = folders_and_items(path)
@@ -46,7 +47,8 @@ def directory_tree_to_map(path):
     items = list(map(get_docussauros_id, cleaned_items))
 
     for folder_path in folders_path:
-        items.append(directory_tree_to_map(folder_path))
+        folder_name = os.path.basename(folder_path)
+        items.append(directory_tree_to_map(folder_path, folder_name))
 
     for item in items:
         if "index" in item:
